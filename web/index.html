@@ -3,19 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>URL Shortener</title>
+    <title>QuickLink - URL Shortener</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/web/styles.css" />
   </head>
   <body>
-    <main class="card">
-      <h1>URL Shortener</h1>
-      <p>Paste any long URL and get a compact shareable link instantly.</p>
-      <form id="shorten-form">
-        <input id="url-input" name="url" type="url" placeholder="https://example.com/very/long/link" required />
-        <button type="submit">Shorten URL</button>
-      </form>
-      <div id="result" class="result"></div>
-      <div id="error" class="error"></div>
+    <div class="hud-bg-grid"></div>
+
+    <header class="hud-header">
+      <div class="hud-logo">
+        <span class="neon-pink">QUICK</span><span class="neon-cyan">LINK</span>
+        <span class="version-tag">SYS//ONLINE</span>
+      </div>
+      <div class="hud-status">
+        <span class="status-indicator"></span>
+      </div>
+    </header>
+
+    <main class="workspace-container">
+      <div class="card">
+        <div class="card-corner corner-tl"></div>
+        <div class="card-corner corner-tr"></div>
+        <div class="card-corner corner-bl"></div>
+        <div class="card-corner corner-br"></div>
+        
+        <div class="card-header-label">&gt;&gt;&gt; TARGET_INPUT // OVERRIDE_DEF</div>
+        <h1>URL SHORTENER</h1>
+        <p>Paste any long hyper-link and compress it to a compact shareable coordinate instantly.</p>
+        
+        <form id="shorten-form">
+          <div class="input-wrapper">
+            <span class="input-prefix">URL://</span>
+            <input id="url-input" name="url" type="url" placeholder="https://example.com/very/long/link" required />
+          </div>
+          <button type="submit">
+            <span class="btn-icon">&gt;&gt;</span> SHORTEN LINK
+          </button>
+        </form>
+        
+        <div id="result" class="result"></div>
+        <div id="error" class="error"></div>
+      </div>
     </main>
 
     <script src="/web/app.js"></script>

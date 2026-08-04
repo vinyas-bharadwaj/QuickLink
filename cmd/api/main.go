@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+	"urlshortener/internal/api/middlewares"
 	"urlshortener/internal/api/routers"
 	"urlshortener/internal/repository/sqlconnect"
 )
@@ -26,20 +28,14 @@ func main() {
 	// Initialize the router
 	router := routers.Router()
 
-	// Define routes
-	http.HandleFunc("/app", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		http.ServeFile(w, r, "web/index.html")
-	})
-	http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
+	// Set a rate limiter of 10 requests every 30 seconds
+	rlMiddleware := middlewares.NewRateLimiter(10, 30*time.Second)
+	handler := rlMiddleware.Middleware(router)
 
 	// Start the server
 	port := ":8080"
 	fmt.Println("Server starting on port:", port)
-	if err := http.ListenAndServe(port, router); err != nil {
+	if err := http.ListenAndServe(port, handler); err != nil {
 		fmt.Println("Error starting server:", err.Error())
 	}
 

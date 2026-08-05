@@ -48,19 +48,33 @@ func (h *ShortenerHandler) ShortenURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate short URL
-	shortURL, err := utils.GenerateShortURL()
+	// Maximum retries in case of a collision occuring
+	const maxRetries = 5
+	var shortURL string
+	for i := 0; i < maxRetries; i++ {
+		// Generate short URL
+		shortURL, err = utils.GenerateShortURL()
+		if err != nil {
+			http.Error(w, "Error generarting the short URL", http.StatusInternalServerError)
+			return
+		}
+
+		// Save mapping into our in-memory store
+		_, err = h.db.Exec("INSERT INTO short_long_mapping VALUES(?, ?)", shortURL, originalURL)
+		// Break out of the loop if no error occurred
+		if err == nil {
+			break
+		}
+
+		// Continue the next iteration of the loop and retry generating another shortURL
+	}
+
+	// In case we fail all the retry attempts
 	if err != nil {
-		http.Error(w, "Error generarting the short URL", http.StatusInternalServerError)
+		http.Error(w, "Could not save short url after retrues", http.StatusInternalServerError)
 		return
 	}
 
-	// Save mapping into our in-memory store
-	_, err = h.db.Exec("INSERT INTO short_long_mapping VALUES(?, ?)", shortURL, originalURL)
-	if err != nil {
-		http.Error(w, "Error adding values to the database", http.StatusInternalServerError)
-		return
-	}
 	response := models.URLResponse{
 		Message:     "Successfully created a shortened URL",
 		ShortURL:    shortURL,

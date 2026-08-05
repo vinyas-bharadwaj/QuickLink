@@ -7,7 +7,7 @@ import (
 )
 
 type RateLimiter struct {
-	mu        *sync.Mutex
+	mu        sync.Mutex
 	visitors  map[string]int
 	limit     int
 	resetTime time.Duration

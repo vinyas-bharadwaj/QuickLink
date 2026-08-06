@@ -36,8 +36,8 @@
     </section>
 
     <section class="card shortener-card">
-      <form id="shorten-form" class="input-wrapper">
-        <input type="url" id="url-input" class="url-input" placeholder="Paste your long URL address here..." required autocomplete="off">
+      <form id="shorten-form" class="input-wrapper" novalidate>
+        <input type="text" id="url-input" class="url-input" placeholder="Paste your long URL address here..." required autocomplete="off">
         <button type="submit" id="submit-btn" class="btn btn-primary">Shorten URL</button>
       </form>
       <div id="error-alert" class="alert error-alert hidden"></div>

@@ -21,14 +21,12 @@ func init() {
 
 	// Initialize the SQL database
 	if err := sqlconnect.InitDB(); err != nil {
-		fmt.Println("Error:", err)
-		return
+		log.Fatalf("Error initializing SQL database: %v", err)
 	}
 
 	// Check if the connection to the SQL database works
 	if _, err := sqlconnect.ConnectDB(); err != nil {
-		fmt.Println("Error:", err)
-		return
+		log.Fatalf("Error connecting to SQL database: %v", err)
 	}
 }
 

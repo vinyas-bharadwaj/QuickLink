@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -41,13 +42,18 @@ func ConnectDB() (*sql.DB, error) {
 		return nil, fmt.Errorf("error opening database: %w", err)
 	}
 
-	if err := db.Ping(); err != nil {
-		db.Close()
-		return nil, fmt.Errorf("error connecting to MariaDB: %w", err)
+	var pingErr error
+	for i := 0; i < 15; i++ {
+		pingErr = db.Ping()
+		if pingErr == nil {
+			fmt.Println("Successfully connected to MariaDB")
+			return db, nil
+		}
+		time.Sleep(1 * time.Second)
 	}
 
-	fmt.Println("Successfully connected to MariaDB")
-	return db, nil
+	db.Close()
+	return nil, fmt.Errorf("error connecting to MariaDB: %w", pingErr)
 }
 
 func getEnv(key, fallback string) string {

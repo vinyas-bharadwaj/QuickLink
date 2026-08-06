@@ -75,7 +75,7 @@ func (h *ShortenerHandler) ShortenURL(w http.ResponseWriter, r *http.Request) {
 
 	// In case we fail all the retry attempts
 	if err != nil {
-		http.Error(w, "Could not save short url after retrues", http.StatusInternalServerError)
+		http.Error(w, "Could not save short url after retries", http.StatusInternalServerError)
 		return
 	}
 

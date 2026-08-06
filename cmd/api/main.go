@@ -2,22 +2,31 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
+
 	"urlshortener/internal/api/middlewares"
 	"urlshortener/internal/api/routers"
 	"urlshortener/internal/repository/sqlconnect"
+
+	"github.com/joho/godotenv"
 )
 
 func init() {
-	err := sqlconnect.InitDB()
-	if err != nil {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: Error loading .env file:", err)
+	}
+
+	// Initialize the SQL database
+	if err := sqlconnect.InitDB(); err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
-	_, err = sqlconnect.ConnectDB()
-	if err != nil {
+	// Check if the connection to the SQL database works
+	if _, err := sqlconnect.ConnectDB(); err != nil {
 		fmt.Println("Error:", err)
 		return
 	}

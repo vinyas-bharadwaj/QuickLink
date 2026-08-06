@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"urlshortener/internal/api/handlers"
+	"urlshortener/internal/repository/redisconnect"
 	"urlshortener/internal/repository/sqlconnect"
 )
 
@@ -14,7 +15,8 @@ func shortenRourter(mux *http.ServeMux) {
 		return
 	}
 
-	shortenHandler := handlers.NewShortenerHandler(db)
+	cache := redisconnect.ConnectRedis()
+	shortenHandler := handlers.NewShortenerHandler(db, cache)
 
 	// URL shortening routes
 	mux.HandleFunc("/shorten", shortenHandler.ShortenURL)
